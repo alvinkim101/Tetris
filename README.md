@@ -2,6 +2,33 @@
 
 Attempt to make Tetris with C++ and SDL2
 
+## Instructions
+
+### Install the necessary packages (might need others as well)
+
+`sudo apt install cmake`
+
+`sudo apt install libsdl2-dev`
+
+`sudo apt install libsdl2-mixer-dev`
+
+
+### Create a build folder in the root directory
+
+`mkdir build`
+
+`cd build`
+
+### Run CMake
+
+`cmake ..`
+
+`cmake --build .`
+
+### And finally run the game
+
+`./Tetris`
+
 ## Resources
 
 | Resource             | URL                                                             | Notes                  |
