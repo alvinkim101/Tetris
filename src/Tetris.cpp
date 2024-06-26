@@ -1,4 +1,5 @@
 #include "Tetris.h"
+#include "Color.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -182,7 +183,7 @@ void Tetris::Update()
 
 void Tetris::Render()
 {
-    SDL_SetRenderDrawColor(m_renderer, 0x00, 0x00, 0x00, SDL_ALPHA_OPAQUE);
+    SDL_SetRenderDrawColor(m_renderer, RGB_BLACK, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(m_renderer);
 
     SDL_RenderPresent(m_renderer);
