@@ -58,6 +58,8 @@ void Tetris::Initialize()
         return;
     }
 
+    m_board = std::make_unique<Board>(m_window, m_renderer);
+
     // Initializing mixer
     if (Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG == 0)
     {
@@ -185,6 +187,8 @@ void Tetris::Render()
 {
     SDL_SetRenderDrawColor(m_renderer, RGB_BLACK, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(m_renderer);
+
+    m_board->RenderBoard();
 
     SDL_RenderPresent(m_renderer);
 }

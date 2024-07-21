@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Board.h"
+
+#include <memory>
+
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_keycode.h>
 
@@ -28,6 +32,8 @@ class Tetris
         void Render();
 
         void ParseInput(SDL_Keycode key);
+
+        std::unique_ptr<Board> m_board;
 
         SDL_DisplayMode m_displayMode;
         class SDL_Window* m_window;
