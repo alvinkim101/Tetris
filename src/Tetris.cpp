@@ -128,6 +128,9 @@ void Tetris::Initialize()
         return;
     }
 
+    // Create board
+    m_board = std::make_unique<Board>(*m_window, *m_renderer);
+
     m_initialized = true;
 }
 
@@ -185,6 +188,8 @@ void Tetris::Render()
 {
     SDL_SetRenderDrawColor(m_renderer, RGB_BLACK, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(m_renderer);
+
+    m_board->Render();
 
     SDL_RenderPresent(m_renderer);
 }
