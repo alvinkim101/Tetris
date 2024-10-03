@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Board.h"
+#include "Tetromino.h"
 
 #include <memory>
 
@@ -34,6 +35,7 @@ class Tetris
         void ParseInput(SDL_Keycode key);
 
         std::unique_ptr<Board> m_board;
+        std::unique_ptr<Tetromino> m_tetromino;
 
         SDL_DisplayMode m_displayMode;
         class SDL_Window* m_window;

@@ -128,8 +128,14 @@ void Tetris::Initialize()
         return;
     }
 
+    // Used for tetromino selection
+    srand(time(NULL));
+
     // Create board
     m_board = std::make_unique<Board>(*m_window, *m_renderer);
+
+    // Create tetromino
+    m_tetromino = std::make_unique<Tetromino>(*m_window, *m_renderer, *m_board);
 
     m_initialized = true;
 }
@@ -182,6 +188,8 @@ void Tetris::Update()
                 break;
         }
     }
+
+    m_tetromino->Update();
 }
 
 void Tetris::Render()
@@ -190,6 +198,7 @@ void Tetris::Render()
     SDL_RenderClear(m_renderer);
 
     m_board->Render();
+    m_tetromino->Render();
 
     SDL_RenderPresent(m_renderer);
 }
@@ -199,18 +208,34 @@ void Tetris::ParseInput(SDL_Keycode key)
     switch (key)
     {
         case SDLK_LEFT:
+            m_tetromino->MoveLeft();
             break;
 
         case SDLK_RIGHT:
+            m_tetromino->MoveRight();
             break;
 
+        case SDLK_UP:
         case SDLK_x:
+            m_tetromino->RotateClockwise();
             break;
 
+        case SDLK_LCTRL:
         case SDLK_z:
+            m_tetromino->RotateCounterClockwise();
             break;
 
         case SDLK_DOWN:
+            m_tetromino->SoftDrop();
+            break;
+
+        case SDLK_SPACE:
+            m_tetromino->HardDrop();
+            break;
+
+        case SDLK_LSHIFT:
+        case SDLK_c:
+            m_tetromino->HoldPiece();
             break;
 
         case SDLK_ESCAPE:
