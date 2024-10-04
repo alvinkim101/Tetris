@@ -52,6 +52,9 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "set": "cpp",
+        "unordered_set": "cpp",
+        "span": "cpp"
     }
 }

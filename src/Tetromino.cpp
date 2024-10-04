@@ -47,6 +47,12 @@ void Tetromino::Reset()
             return coordinate;
         }
     );
+
+    // If not valid -> game over
+    if (!IsValid(m_coordinates))
+    {
+
+    }
 }
 
 void Tetromino::Update()
@@ -125,7 +131,9 @@ void Tetromino::Translate(Translation translation)
         */
         if (translation == Translation::Down)
         {
-            
+            Insert(m_coordinates, m_color);
+            LineClear();
+            Reset();
         }
     }
 
@@ -172,6 +180,16 @@ void Tetromino::Rotate(Rotation rotation)
         m_coordinates = coordinates;
         m_orientation = orientation;
     }
+}
+
+void Tetromino::Insert(std::span<Coordinates> coordinates, const Color& color)
+{
+    m_board.Insert(coordinates, color);
+}
+
+void Tetromino::LineClear()
+{
+    m_board.LineClear();
 }
 
 bool Tetromino::IsValid(std::span<Coordinates> coordinates) const

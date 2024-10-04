@@ -1,5 +1,8 @@
 #include "Board.h"
 
+#include <vector>
+#include <utility>
+
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
@@ -47,6 +50,121 @@ void Board::Render() const
         block.x = 0;
         block.y += ratio_h;
     }
+}
+
+void Board::Insert(std::span<glm::ivec2> coordinates, const glm::uvec3& color)
+{
+    m_recentRows.clear();
+
+    for (const auto& coordinate : coordinates)
+    {
+        m_board[coordinate.y][coordinate.x] = color;
+        m_recentRows.insert(coordinate.y);
+    }
+}
+
+void Board::LineClear()
+{
+    std::vector<uint8_t> fullRows;
+    fullRows.reserve(4);
+
+    // Check which of the recently modified rows are full
+    for (const auto& row : m_recentRows)
+    {
+        if (IsRowFull(row))
+        {
+            fullRows.push_back(row);
+        }
+    }
+
+    // Early return
+    if (fullRows.empty())
+    {
+        return;
+    }
+
+    std::vector<std::pair<uint8_t, uint8_t>> contiguousRows;
+    contiguousRows.reserve(2);
+
+    // Store full rows as contiguous rows using pairs, storing start row and end row. First value will be same as second value if not contiguous with anything.
+    int start = fullRows[0];
+    for (int i = 1; i < fullRows.size(); i++)
+    {
+        if (fullRows[i] != fullRows[i - 1] + 1)
+        {
+            contiguousRows.emplace_back(start, fullRows[i - 1]);
+            start = i;
+        }
+    }
+    contiguousRows.emplace_back(start, fullRows[fullRows.size() - 1]);
+
+    // Clear full rows
+    for (const auto& row : fullRows)
+    {
+        ClearRow(row);
+    }
+
+    // For every nonempty row above a (formerly) contiguous full row, lower it by a specified amount
+    for (int i = 0; i < contiguousRows.size(); i++)
+    {
+        uint8_t row = contiguousRows[i].first - 1; // Start at row before current row
+
+        while (!IsRowEmpty(row)) // Continue while non empty rows appear
+        {
+            MoveRow(row, row + 1 + contiguousRows[i].second - contiguousRows[i].first); // The point of creating the contiguous row data structure was to optimize moving contiguous full rows by moving them to their final destination
+            row--;
+        }
+    }
+}
+
+void Board::MoveRow(uint8_t srcRow, uint8_t dstRow)
+{
+    CopyRow(srcRow, dstRow);
+    ClearRow(srcRow);
+}
+
+void Board::CopyRow(uint8_t srcRow, uint8_t dstRow)
+{
+    m_board[dstRow] = m_board[srcRow];
+}
+
+void Board::ClearRow(uint8_t row)
+{
+    for (auto& square : m_board[row])
+    {
+        square = White;
+    }
+}
+
+bool Board::IsRowFull(uint8_t row) const
+{
+    for (const auto& square : m_board[row])
+    {
+        if (square == White)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Board::IsRowEmpty(uint8_t row) const
+{
+    if (row < 0 || row >= Rows)
+    {
+        return true;
+    }
+
+    for (const auto& square : m_board[row])
+    {
+        if (square != White)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool Board::IsOccupied(int8_t x, int8_t y) const

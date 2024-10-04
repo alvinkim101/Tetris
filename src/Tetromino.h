@@ -52,6 +52,9 @@ class Tetromino
         void Translate(Translation translation);
         void Rotate(Rotation rotation);
 
+        void Insert(std::span<Coordinates> coordinates, const Color& color);
+        void LineClear();
+
         bool IsValid(std::span<Coordinates> coordinates) const;
 
         static constexpr size_t Size = 4;
