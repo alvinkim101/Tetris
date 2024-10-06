@@ -12,6 +12,7 @@ target_sources(Tetris PRIVATE
     src/Tetris.cpp
     src/Board.cpp
     src/Tetromino.cpp
+    src/Pieces.cpp
 )
 
 # SDL2

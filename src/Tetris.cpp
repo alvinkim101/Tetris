@@ -128,9 +128,6 @@ void Tetris::Initialize()
         return;
     }
 
-    // Used for tetromino selection
-    srand(time(NULL));
-
     // Create board
     m_board = std::make_unique<Board>(*m_window, *m_renderer);
 

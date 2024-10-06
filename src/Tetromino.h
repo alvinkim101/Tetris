@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Pieces.h"
+
 #include <array>
 #include <span>
 #include <chrono>
@@ -30,8 +32,8 @@ class Tetromino
 
         using Coordinates = glm::ivec2;
         using Color = glm::uvec3;
-        using Shape = uint8_t;
         using Orientation = int8_t;
+        using Piece = const std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>*;
 
         Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board);
 
@@ -57,11 +59,16 @@ class Tetromino
 
         bool IsValid(std::span<Coordinates> coordinates) const;
 
+        const std::vector<Coordinates>& GetBaseCoordinates(Orientation orientation) const; // Coordinates centered at origin at a specified orientation
+        const Color& GetColor() const;
+
         static constexpr size_t Size = 4;
 
+        Pieces m_pieces;
+        Piece m_piece;
+
+        // TODO: Change m_coordinates to m_offset
         std::array<Coordinates, Size> m_coordinates;
-        Color m_color;
-        Shape m_shape; // Index for current shape
         Orientation m_orientation; // Index for current orientation
 
         std::chrono::steady_clock::time_point m_dropTime;

@@ -65,6 +65,8 @@ void Board::Insert(std::span<glm::ivec2> coordinates, const glm::uvec3& color)
 
 void Board::LineClear()
 {
+    // TODO: Figure out the condition(s) for blocks hovering above an empty row
+
     std::vector<uint8_t> fullRows;
     fullRows.reserve(4);
 

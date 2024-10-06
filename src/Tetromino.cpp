@@ -8,21 +8,6 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-// Contains all possible tetrominoes
-// First value has color, second value has possible orientations
-// First coordinates are at origin
-// Clockwise ordered
-static const std::vector<std::pair<Tetromino::Color, std::vector<std::vector<Tetromino::Coordinates>>>> Tetrominoes =
-{
-    /* I */ { glm::uvec3(RGB_CYAN), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(-2, 0), glm::ivec2(1, 0)}, {glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(0, -2), glm::ivec2(0, 1)}}},
-    /* O */ { glm::uvec3(RGB_YELLOW), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(0, -1), glm::ivec2(-1, -1) }}},
-    /* T */ { glm::uvec3(RGB_PURPLE), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(0, 1), glm::ivec2(1, 0) }, { glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(-1, 0), glm::ivec2(0, 1) }, { glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(-1, 0), glm::ivec2(1, 0) }, { glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(0, 1), glm::ivec2(1, 0) }}},
-    /* J */ { glm::uvec3(RGB_BLUE), {{ glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(-1, 1), glm::ivec2(0, 1) }, { glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(-1, -1), glm::ivec2(1, 0) }, { glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(0, 1), glm::ivec2(1, -1) }, { glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(1, 0), glm::ivec2(1, 1) }}},
-    /* L */ { glm::uvec3(RGB_ORANGE), {{ glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(0, 1), glm::ivec2(1, 1) }, { glm::ivec2(0, 0), glm::ivec2(-1, 1), glm::ivec2(-1, 0), glm::ivec2(1, 0) }, { glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(-1, -1), glm::ivec2(0, 1) }, { glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(1, -1), glm::ivec2(1, 0) }}},
-    /* S */ { glm::uvec3(RGB_GREEN), {{ glm::ivec2(0, 0), glm::ivec2(-1, 1), glm::ivec2(0, 1), glm::ivec2(1, 0) }, { glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(1, 0), glm::ivec2(1, 1) }}},
-    /* Z */ { glm::uvec3(RGB_RED), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(0, 1), glm::ivec2(1, 1) }, { glm::ivec2(0, 0), glm::ivec2(0, 1), glm::ivec2(1, -1), glm::ivec2(1, 0) }}}
-};
-
 Tetromino::Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board) : m_window(window), m_renderer(renderer), m_board(board)
 {
     Reset();
@@ -34,10 +19,9 @@ void Tetromino::Reset()
     static constexpr int8_t x_offset = m_board.Cols / 2;
     static constexpr int8_t y_offset = 1;
 
-    m_shape = rand() % Tetrominoes.size();
+    m_piece = m_pieces.Random();
     m_orientation = 0;
-    m_color = Tetrominoes[m_shape].first;
-    std::copy(Tetrominoes[m_shape].second[m_orientation].begin(), Tetrominoes[m_shape].second[m_orientation].end(), m_coordinates.begin());
+    std::copy(GetBaseCoordinates(m_orientation).begin(), GetBaseCoordinates(m_orientation).end(), m_coordinates.begin());
 
     std::transform(m_coordinates.begin(), m_coordinates.end(), m_coordinates.begin(),
         [](Coordinates& coordinate) -> Coordinates
@@ -76,7 +60,8 @@ void Tetromino::Render() const
     int ratio_h = window_h / m_board.Rows;
     SDL_Rect block{0, 0, ratio_w, ratio_h};
 
-    SDL_SetRenderDrawColor(&m_renderer, m_color.r, m_color.g, m_color.b, SDL_ALPHA_OPAQUE);
+    const Color& color = GetColor();
+    SDL_SetRenderDrawColor(&m_renderer, color.r, color.g, color.b, SDL_ALPHA_OPAQUE);
     for (const auto& coordinate : m_coordinates)
     {
         block.x = coordinate.x * ratio_w;
@@ -131,7 +116,7 @@ void Tetromino::Translate(Translation translation)
         */
         if (translation == Translation::Down)
         {
-            Insert(m_coordinates, m_color);
+            Insert(m_coordinates, GetColor());
             LineClear();
             Reset();
         }
@@ -154,19 +139,19 @@ void Tetromino::Rotate(Rotation rotation)
     switch (rotation)
     {
         case Rotation::Clockwise:
-            orientation = (m_orientation + 1) % Tetrominoes[m_shape].second.size();
+            orientation = (m_orientation + 1) % m_piece->second.size();
             break;
         case Rotation::CounterClockwise:
             orientation = m_orientation - 1;
             if (orientation == -1)
             {
-                orientation = Tetrominoes[m_shape].second.size() - 1;
+                orientation = m_piece->second.size() - 1;
             }
             break;
     }
 
     // Add new orientation coordinates (centered at the origin) with the offset, and assign to temp variables
-    std::transform(Tetrominoes[m_shape].second[orientation].begin(), Tetrominoes[m_shape].second[orientation].end(), coordinates.begin(),
+    std::transform(GetBaseCoordinates(orientation).begin(), GetBaseCoordinates(orientation).end(), coordinates.begin(),
         [&offset](Coordinates coordinate) -> Coordinates
         {
             coordinate += offset;
@@ -203,6 +188,16 @@ bool Tetromino::IsValid(std::span<Coordinates> coordinates) const
     }
 
     return true;
+}
+
+const std::vector<Tetromino::Coordinates>& Tetromino::GetBaseCoordinates(Orientation orientation) const
+{
+    return m_piece->second[orientation];
+}
+
+const Tetromino::Color& Tetromino::GetColor() const
+{
+    return m_piece->first;
 }
 
 void Tetromino::MoveLeft()

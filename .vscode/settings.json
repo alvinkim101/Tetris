@@ -55,6 +55,8 @@
         "variant": "cpp",
         "set": "cpp",
         "unordered_set": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp"
     }
 }
