@@ -17,8 +17,8 @@ class Audio
         void PlaySound(Sound sound) const;
 
     private:
-        #define SOUND_EFFECT(name) struct Mix_Chunk* m_##name##Sound;
+        #define SOUND_EFFECT(name) struct Mix_Chunk* m_##name##Sound = nullptr;
         #include "macro/Sound.h"
 
-        struct _Mix_Music* m_bgm;
+        struct _Mix_Music* m_bgm = nullptr;
 };

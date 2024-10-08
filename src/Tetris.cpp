@@ -87,6 +87,8 @@ void Tetris::Deinitialize()
 
     SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
+    m_renderer = nullptr;
+    m_window = nullptr;
 
     SDL_Quit();
 }

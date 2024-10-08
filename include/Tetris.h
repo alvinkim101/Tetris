@@ -31,8 +31,8 @@ class Tetris
         std::unique_ptr<Audio> m_audio;
 
         SDL_DisplayMode m_displayMode;
-        class SDL_Window* m_window;
-        class SDL_Renderer* m_renderer;
+        class SDL_Window* m_window = nullptr;
+        class SDL_Renderer* m_renderer = nullptr;
         
         bool m_initialized = false;
         bool m_running;

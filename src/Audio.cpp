@@ -23,10 +23,13 @@ bool Audio::Load()
 
 void Audio::Free()
 {
-    #define SOUND_EFFECT(name) Mix_FreeChunk(m_##name##Sound);
+    #define SOUND_EFFECT(name) \
+    Mix_FreeChunk(m_##name##Sound); \
+    m_##name##Sound = nullptr;
     #include "macro/Sound.h"
 
     Mix_FreeMusic(m_bgm);
+    m_bgm = nullptr;
 }
 
 void Audio::PlayMusic() const
