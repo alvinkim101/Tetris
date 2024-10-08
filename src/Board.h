@@ -14,7 +14,7 @@ class Board
     using Color = glm::uvec3;
 
     public:
-        Board(class SDL_Window& window, class SDL_Renderer& renderer);
+        Board(class SDL_Window& window, class SDL_Renderer& renderer, class Audio& audio);
 
         void Render() const;
 
@@ -38,8 +38,10 @@ class Board
         bool IsRowEmpty(uint8_t row) const;
 
         std::array<std::array<Color, Cols>, Rows> m_board;
+
         class SDL_Window& m_window;
         class SDL_Renderer& m_renderer;
+        class Audio& m_audio;
 
         std::set<uint8_t> m_recentRows; // Keep track of which rows were most recently inserted into, to optimize line clears. Using std::set for ordered and uniqueness property
 

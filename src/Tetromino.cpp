@@ -1,5 +1,6 @@
 #include "Tetromino.h"
 #include "Board.h"
+#include "Audio.h"
 #include "Color.h"
 
 #include <vector>
@@ -8,7 +9,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-Tetromino::Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board) : m_window(window), m_renderer(renderer), m_board(board)
+Tetromino::Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board, Audio& audio) : m_window(window), m_renderer(renderer), m_board(board), m_audio(audio)
 {
     Reset();
     m_dropTime = std::chrono::steady_clock::now();
@@ -127,6 +128,10 @@ void Tetromino::Translate(Translation translation)
     {
         m_dropTime = std::chrono::steady_clock::now();
     }
+    else
+    {
+        m_audio.PlaySound(Audio::Sound::Translate);
+    }
 }
 
 void Tetromino::Rotate(Rotation rotation)
@@ -164,6 +169,7 @@ void Tetromino::Rotate(Rotation rotation)
     {
         m_coordinates = coordinates;
         m_orientation = orientation;
+        m_audio.PlaySound(Audio::Sound::Rotate);
     }
 }
 

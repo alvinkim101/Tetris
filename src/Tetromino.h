@@ -12,6 +12,7 @@
 class SDL_Window;
 class SDL_Renderer;
 class Board;
+class Audio;
 
 class Tetromino
 {
@@ -35,7 +36,7 @@ class Tetromino
         using Orientation = int8_t;
         using Piece = const std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>*;
 
-        Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board);
+        Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board, Audio& audio);
 
         void Update();
         void Render() const;
@@ -47,6 +48,8 @@ class Tetromino
         void SoftDrop();
         void HardDrop();
         void HoldPiece();
+
+        static constexpr size_t Size = 4;
 
     private:
         void Reset(); // Select random shape and set the coordinates to the top middle of the board
@@ -62,8 +65,6 @@ class Tetromino
         const std::vector<Coordinates>& GetBaseCoordinates(Orientation orientation) const; // Coordinates centered at origin at a specified orientation
         const Color& GetColor() const;
 
-        static constexpr size_t Size = 4;
-
         Pieces m_pieces;
         Piece m_piece;
 
@@ -76,4 +77,5 @@ class Tetromino
         SDL_Window& m_window;
         SDL_Renderer& m_renderer;
         Board& m_board;
+        Audio& m_audio;
 };

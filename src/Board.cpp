@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Tetromino.h"
+#include "Audio.h"
 
 #include <vector>
 #include <utility>
@@ -6,7 +8,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
-Board::Board(SDL_Window& window, SDL_Renderer& renderer) : m_window(window), m_renderer(renderer)
+Board::Board(SDL_Window& window, SDL_Renderer& renderer, Audio& audio) : m_window(window), m_renderer(renderer), m_audio(audio)
 {
     // Initialize board to white
     for (auto& row : m_board)
@@ -61,6 +63,8 @@ void Board::Insert(std::span<glm::ivec2> coordinates, const glm::uvec3& color)
         m_board[coordinate.y][coordinate.x] = color;
         m_recentRows.insert(coordinate.y);
     }
+
+    m_audio.PlaySound(Audio::Sound::Land);
 }
 
 void Board::LineClear()
@@ -117,6 +121,17 @@ void Board::LineClear()
             row--;
         }
     }
+
+    // TODO: Wait for line clear sound to finish
+    if (fullRows.size() == Tetromino::Size)
+    {
+        m_audio.PlaySound(Audio::Sound::Tetris);
+    }
+    else
+    {
+        m_audio.PlaySound(Audio::Sound::LineClear);
+    }
+    m_audio.PlaySound(Audio::Sound::Fall);
 }
 
 void Board::MoveRow(uint8_t srcRow, uint8_t dstRow)

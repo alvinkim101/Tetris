@@ -33,3 +33,15 @@ void Audio::PlayMusic() const
 {
     Mix_PlayMusic(m_bgm, -1);
 }
+
+void Audio::PlaySound(Sound sound) const
+{
+    switch (sound)
+    {
+        #define SOUND_EFFECT(name) \
+        case Sound::name: \
+            Mix_PlayChannel(-1, m_##name##Sound, 0); \
+            break;
+        #include "Macros/Sound.h"
+    }
+}

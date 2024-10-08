@@ -71,10 +71,10 @@ void Tetris::Initialize()
     }
 
     // Create board
-    m_board = std::make_unique<Board>(*m_window, *m_renderer);
+    m_board = std::make_unique<Board>(*m_window, *m_renderer, *m_audio);
 
     // Create tetromino
-    m_tetromino = std::make_unique<Tetromino>(*m_window, *m_renderer, *m_board);
+    m_tetromino = std::make_unique<Tetromino>(*m_window, *m_renderer, *m_board, *m_audio);
 
     m_initialized = true;
 }
