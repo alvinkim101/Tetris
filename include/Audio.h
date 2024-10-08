@@ -6,7 +6,7 @@ class Audio
         enum class Sound
         {
             #define SOUND_EFFECT(name) name,
-            #include "Macros/Sound.h"
+            #include "macro/Sound.h"
         };
 
         bool Load();
@@ -18,7 +18,7 @@ class Audio
 
     private:
         #define SOUND_EFFECT(name) struct Mix_Chunk* m_##name##Sound;
-        #include "Macros/Sound.h"
+        #include "macro/Sound.h"
 
         struct _Mix_Music* m_bgm;
 };

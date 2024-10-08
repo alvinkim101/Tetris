@@ -10,7 +10,7 @@ bool Audio::Load()
     { \
         return false; \
     }
-    #include "Macros/Sound.h"
+    #include "macro/Sound.h"
 
     m_bgm = Mix_LoadMUS("../assets/A-Type.ogg");
     if (m_bgm == nullptr)
@@ -24,7 +24,7 @@ bool Audio::Load()
 void Audio::Free()
 {
     #define SOUND_EFFECT(name) Mix_FreeChunk(m_##name##Sound);
-    #include "Macros/Sound.h"
+    #include "macro/Sound.h"
 
     Mix_FreeMusic(m_bgm);
 }
@@ -42,6 +42,6 @@ void Audio::PlaySound(Sound sound) const
         case Sound::name: \
             Mix_PlayChannel(-1, m_##name##Sound, 0); \
             break;
-        #include "Macros/Sound.h"
+        #include "macro/Sound.h"
     }
 }

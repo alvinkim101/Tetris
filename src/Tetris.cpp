@@ -1,5 +1,5 @@
 #include "Tetris.h"
-#include "Color.h"
+#include "macro/Color.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>

@@ -1,5 +1,5 @@
 #include "Pieces.h"
-#include "Color.h"
+#include "macro/Color.h"
 
 #include <algorithm>
 #include <iostream>
