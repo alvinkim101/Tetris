@@ -9,15 +9,6 @@ constexpr int FORMAT = AUDIO_F32SYS;
 constexpr int CHANNELS = 2;
 constexpr int CHUNKSIZE = 2048;
 
-constexpr const char* BACKGROUND_MUSIC = "../assets/A-Type.ogg";
-constexpr const char* MOVE_SOUND = "../assets/Move.wav";
-constexpr const char* ROTATE_SOUND = "../assets/Rotate.wav";
-constexpr const char* LAND_SOUND = "../assets/Land.wav";
-constexpr const char* LINE_CLEAR_SOUND = "../assets/LineClear.wav";
-constexpr const char* FOUR_LINE_CLEAR_SOUND = "../assets/Tetris.wav";
-constexpr const char* LEVEL_UP_SOUND = "../assets/LevelUp.wav";
-constexpr const char* GAME_OVER_SOUND = "../assets/GameOver.wav";
-
 Tetris::Tetris()
 {
     Initialize();
@@ -71,60 +62,11 @@ void Tetris::Initialize()
         return;
     }
 
-    // Loading music and sound effects
-    m_backgroundMusic = Mix_LoadMUS(BACKGROUND_MUSIC);
-    if (m_backgroundMusic == nullptr)
+    // Create audio player
+    m_audio = std::make_unique<Audio>();
+    if (m_audio->Load() == false)
     {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadMUS failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_moveSound = Mix_LoadWAV(MOVE_SOUND);
-    if (m_moveSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_rotateSound = Mix_LoadWAV(ROTATE_SOUND);
-    if (m_rotateSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_landSound = Mix_LoadWAV(LAND_SOUND);
-    if (m_landSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_lineClearSound = Mix_LoadWAV(LINE_CLEAR_SOUND);
-    if (m_lineClearSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_fourLineClearSound = Mix_LoadWAV(FOUR_LINE_CLEAR_SOUND);
-    if (m_fourLineClearSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_levelUpSound = Mix_LoadWAV(LEVEL_UP_SOUND);
-    if (m_levelUpSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
-        return;
-    }
-
-    m_gameOverSound = Mix_LoadWAV(GAME_OVER_SOUND);
-    if (m_gameOverSound == nullptr)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_LoadWAV failure: %s", Mix_GetError());
+        SDL_LogCritical(SDL_LOG_CATEGORY_AUDIO, "Mix_Load failure: %s", Mix_GetError());
         return;
     }
 
@@ -139,10 +81,7 @@ void Tetris::Initialize()
 
 void Tetris::Deinitialize()
 {
-    #define X(soundEffect) Mix_FreeChunk(m_##soundEffect##Sound);
-    SOUND_EFFECTS
-    #undef X
-    Mix_FreeMusic(m_backgroundMusic);
+    m_audio->Free();
     Mix_CloseAudio();
     Mix_Quit();
 
@@ -159,7 +98,7 @@ void Tetris::RunGame()
         return;
     }
 
-    Mix_PlayMusic(m_backgroundMusic, -1);
+    m_audio->PlayMusic();
 
     m_running = true;
     while (m_running)
