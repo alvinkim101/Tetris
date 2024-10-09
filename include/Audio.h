@@ -1,5 +1,11 @@
 #pragma once
 
+struct Mix_Chunk;
+struct _Mix_Music;
+
+namespace Tetris
+{
+
 class Audio
 {
     public:
@@ -17,8 +23,10 @@ class Audio
         void PlaySound(Sound sound) const;
 
     private:
-        #define SOUND_EFFECT(name) struct Mix_Chunk* m_##name##Sound = nullptr;
+        #define SOUND_EFFECT(name) Mix_Chunk* m_##name##Sound = nullptr;
         #include "macro/Sound.h"
 
-        struct _Mix_Music* m_bgm = nullptr;
+        _Mix_Music* m_bgm = nullptr;
 };
+
+}

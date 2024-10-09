@@ -8,6 +8,9 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
+namespace Tetris
+{
+
 Board::Board(SDL_Window& window, SDL_Renderer& renderer, Audio& audio) : m_window(window), m_renderer(renderer), m_audio(audio)
 {
     // Initialize board to white
@@ -197,4 +200,6 @@ bool Board::IsOccupied(int8_t x, int8_t y) const
     }
 
     return true;
+}
+
 }

@@ -2,6 +2,6 @@
 
 int main(int argc, char* args[])
 {
-    Tetris tetris;
+    Tetris::Tetris tetris;
     tetris.RunGame();
 }

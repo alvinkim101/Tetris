@@ -4,10 +4,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
+namespace
+{
+
 constexpr int FREQUENCY = 48000;
 constexpr int FORMAT = AUDIO_F32SYS;
 constexpr int CHANNELS = 2;
 constexpr int CHUNKSIZE = 2048;
+
+}
+
+namespace Tetris
+{
 
 Tetris::Tetris()
 {
@@ -180,4 +188,6 @@ void Tetris::ParseInput(SDL_Keycode key)
             m_running = false;
             break;
     }
+}
+
 }

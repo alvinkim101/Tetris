@@ -9,8 +9,12 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-class SDL_Window;
-class SDL_Renderer;
+struct SDL_Window;
+struct SDL_Renderer;
+
+namespace Tetris
+{
+
 class Board;
 class Audio;
 
@@ -79,3 +83,5 @@ class Tetromino
         Board& m_board;
         Audio& m_audio;
 };
+
+}

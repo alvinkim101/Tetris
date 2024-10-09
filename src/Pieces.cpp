@@ -4,6 +4,9 @@
 #include <algorithm>
 #include <iostream>
 
+namespace Tetris
+{
+
 // Contains all seven distinct tetrominoes
 // First value contains color, second value contains possible orientations
 // First coordinates are at origin
@@ -48,4 +51,6 @@ const std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>* Pieces::Rando
 void Pieces::Shuffle()
 {
     std::shuffle(m_indices.begin(), m_indices.end(), m_rng);
+}
+
 }

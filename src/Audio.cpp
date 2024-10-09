@@ -2,6 +2,9 @@
 
 #include <SDL2/SDL_mixer.h>
 
+namespace Tetris
+{
+
 bool Audio::Load()
 {
     #define SOUND_EFFECT(name) \
@@ -47,4 +50,6 @@ void Audio::PlaySound(Sound sound) const
             break;
         #include "macro/Sound.h"
     }
+}
+
 }
