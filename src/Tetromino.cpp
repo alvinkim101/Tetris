@@ -173,7 +173,7 @@ void Tetromino::Rotate(Rotation rotation)
     }
 }
 
-void Tetromino::Insert(std::span<Coordinates> coordinates, const Color& color)
+void Tetromino::Insert(std::span<const Coordinates> coordinates, const Color& color)
 {
     m_board.Insert(coordinates, color);
 }
@@ -183,7 +183,7 @@ void Tetromino::LineClear()
     m_board.LineClear();
 }
 
-bool Tetromino::IsValid(std::span<Coordinates> coordinates) const
+bool Tetromino::IsValid(std::span<const Coordinates> coordinates) const
 {
     for (const auto& coordinate : coordinates)
     {

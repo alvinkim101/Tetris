@@ -18,7 +18,7 @@ class Board
 
         void Render() const;
 
-        void Insert(std::span<glm::ivec2> coordinates, const glm::uvec3& color);
+        void Insert(std::span<const glm::ivec2> coordinates, const glm::uvec3& color);
         void LineClear();
 
         bool IsOccupied(int8_t row, int8_t col) const; // If white then vacant

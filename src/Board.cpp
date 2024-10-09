@@ -54,7 +54,7 @@ void Board::Render() const
     }
 }
 
-void Board::Insert(std::span<glm::ivec2> coordinates, const glm::uvec3& color)
+void Board::Insert(std::span<const glm::ivec2> coordinates, const glm::uvec3& color)
 {
     m_recentRows.clear();
 
