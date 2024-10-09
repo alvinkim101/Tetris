@@ -9,6 +9,12 @@
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_keycode.h>
 
+struct SDL_Window;
+struct SDL_Renderer;
+
+namespace Tetris
+{
+
 class Tetris
 {
     public:
@@ -31,9 +37,11 @@ class Tetris
         std::unique_ptr<Audio> m_audio;
 
         SDL_DisplayMode m_displayMode;
-        class SDL_Window* m_window = nullptr;
-        class SDL_Renderer* m_renderer = nullptr;
+        SDL_Window* m_window = nullptr;
+        SDL_Renderer* m_renderer = nullptr;
         
         bool m_initialized = false;
         bool m_running;
 };
+
+}

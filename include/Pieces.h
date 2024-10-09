@@ -8,6 +8,9 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
+namespace Tetris
+{
+
 // Using single bag randomization
 class Pieces
 {
@@ -28,3 +31,5 @@ class Pieces
         std::array<uint8_t, NumberOfPieces> m_indices;
         uint8_t m_currentIndex = 0;
 };
+
+}

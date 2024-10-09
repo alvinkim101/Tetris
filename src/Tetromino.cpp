@@ -9,6 +9,9 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 
+namespace Tetris
+{
+
 Tetromino::Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board, Audio& audio) : m_window(window), m_renderer(renderer), m_board(board), m_audio(audio)
 {
     Reset();
@@ -238,5 +241,7 @@ void Tetromino::HardDrop()
 
 void Tetromino::HoldPiece()
 {
+
+}
 
 }
