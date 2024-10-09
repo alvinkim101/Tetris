@@ -209,31 +209,6 @@ const Tetromino::Color& Tetromino::GetColor() const
     return m_piece->first;
 }
 
-void Tetromino::MoveLeft()
-{
-    Translate(Translation::Left);
-}
-
-void Tetromino::MoveRight()
-{
-    Translate(Translation::Right);
-}
-
-void Tetromino::RotateClockwise()
-{
-    Rotate(Rotation::Clockwise);
-}
-
-void Tetromino::RotateCounterClockwise()
-{
-    Rotate(Rotation::CounterClockwise);
-}
-
-void Tetromino::SoftDrop()
-{
-    Translate(Translation::Down);
-}
-
 void Tetromino::HardDrop()
 {
 
