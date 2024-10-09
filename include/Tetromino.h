@@ -84,4 +84,29 @@ class Tetromino
         Audio& m_audio;
 };
 
+inline void Tetromino::MoveLeft()
+{
+    Translate(Translation::Left);
+}
+
+inline void Tetromino::MoveRight()
+{
+    Translate(Translation::Right);
+}
+
+inline void Tetromino::RotateClockwise()
+{
+    Rotate(Rotation::Clockwise);
+}
+
+inline void Tetromino::RotateCounterClockwise()
+{
+    Rotate(Rotation::CounterClockwise);
+}
+
+inline void Tetromino::SoftDrop()
+{
+    Translate(Translation::Down);
+}
+
 }
