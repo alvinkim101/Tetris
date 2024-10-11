@@ -18,6 +18,7 @@ namespace Tetris
 class Tetris
 {
     public:
+        // TODO: explicitly state whether classes are copyable / movable
         Tetris();
         ~Tetris();
 

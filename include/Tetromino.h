@@ -38,7 +38,6 @@ class Tetromino
         using Coordinates = glm::ivec2;
         using Color = glm::uvec3;
         using Orientation = int8_t;
-        using Piece = const std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>*;
 
         Tetromino(SDL_Window& window, SDL_Renderer& renderer, Board& board, Audio& audio);
 
@@ -53,8 +52,6 @@ class Tetromino
         void HardDrop();
         void HoldPiece();
 
-        static constexpr size_t Size = 4;
-
     private:
         void Reset(); // Select random shape and set the coordinates to the top middle of the board
 
@@ -66,14 +63,14 @@ class Tetromino
 
         bool IsValid(std::span<const Coordinates> coordinates) const;
 
-        const std::vector<Coordinates>& GetBaseCoordinates(Orientation orientation) const; // Coordinates centered at origin at a specified orientation
+        const std::array<Coordinates, Pieces::Size>& GetBaseCoordinates(Orientation orientation) const; // Coordinates centered at origin at a specified orientation
         const Color& GetColor() const;
 
         Pieces m_pieces;
-        Piece m_piece;
+        const Pieces::Piece* m_piece;
 
         // TODO: Change m_coordinates to m_offset
-        std::array<Coordinates, Size> m_coordinates;
+        std::array<Coordinates, Pieces::Size> m_coordinates;
         Orientation m_orientation; // Index for current orientation
 
         std::chrono::steady_clock::time_point m_dropTime;

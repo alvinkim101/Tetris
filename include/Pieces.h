@@ -3,7 +3,6 @@
 #include <array>
 #include <vector>
 #include <random>
-#include <utility>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -15,14 +14,27 @@ namespace Tetris
 class Pieces
 {
     public:
+        static constexpr size_t Size = 4;
+
+        struct Piece
+        {
+            Piece(const glm::uvec3& color, const std::vector<std::array<glm::ivec2, Size>>& orientations) : color(color), orientations(orientations)
+            {
+
+            }
+
+            std::vector<std::array<glm::ivec2, Size>> orientations;
+            glm::uvec3 color;
+        };
+
         Pieces();
 
-        const std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>* Random();
+        const Piece* Random();
 
     private:
         void Shuffle();
 
-        static const std::vector<std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>> Tetrominoes;
+        static const std::vector<Piece> Tetrominoes;
 
         static thread_local std::default_random_engine m_rng;
 

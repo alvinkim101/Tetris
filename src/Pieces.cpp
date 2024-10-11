@@ -11,7 +11,7 @@ namespace Tetris
 // First value contains color, second value contains possible orientations
 // First coordinates are at origin
 // Clockwise ordered
-const std::vector<std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>> Pieces::Tetrominoes =
+const std::vector<Pieces::Piece> Pieces::Tetrominoes =
 {
     /* I */ { glm::uvec3(RGB_CYAN), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(-2, 0), glm::ivec2(1, 0)}, {glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(0, -2), glm::ivec2(0, 1)}}},
     /* O */ { glm::uvec3(RGB_YELLOW), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(0, -1), glm::ivec2(-1, -1) }}},
@@ -37,7 +37,7 @@ Pieces::Pieces()
     Shuffle();
 }
 
-const std::pair<glm::uvec3, std::vector<std::vector<glm::ivec2>>>* Pieces::Random()
+const Pieces::Piece* Pieces::Random()
 {
     if (m_currentIndex == NumberOfPieces)
     {

@@ -141,19 +141,19 @@ void Tetromino::Rotate(Rotation rotation)
 {
     Orientation orientation;
     auto offset = m_coordinates[0]; // First coordinate is relative to the origin
-    std::array<Coordinates, Size> coordinates;
+    std::array<Coordinates, Pieces::Size> coordinates;
 
     // Calculate new orientation, and assign to a temp variable
     switch (rotation)
     {
         case Rotation::Clockwise:
-            orientation = (m_orientation + 1) % m_piece->second.size();
+            orientation = (m_orientation + 1) % m_piece->orientations.size();
             break;
         case Rotation::CounterClockwise:
             orientation = m_orientation - 1;
             if (orientation == -1)
             {
-                orientation = m_piece->second.size() - 1;
+                orientation = m_piece->orientations.size() - 1;
             }
             break;
     }
@@ -199,14 +199,14 @@ bool Tetromino::IsValid(std::span<const Coordinates> coordinates) const
     return true;
 }
 
-const std::vector<Tetromino::Coordinates>& Tetromino::GetBaseCoordinates(Orientation orientation) const
+const std::array<Tetromino::Coordinates, Pieces::Size>& Tetromino::GetBaseCoordinates(Orientation orientation) const
 {
-    return m_piece->second[orientation];
+    return m_piece->orientations[orientation];
 }
 
 const Tetromino::Color& Tetromino::GetColor() const
 {
-    return m_piece->first;
+    return m_piece->color;
 }
 
 void Tetromino::HardDrop()

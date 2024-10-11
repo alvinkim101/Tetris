@@ -126,7 +126,7 @@ void Board::LineClear()
     }
 
     // TODO: Wait for line clear sound to finish
-    if (fullRows.size() == Tetromino::Size)
+    if (fullRows.size() == Pieces::Size)
     {
         m_audio.PlaySound(Audio::Sound::Tetris);
     }
