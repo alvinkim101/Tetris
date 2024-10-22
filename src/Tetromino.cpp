@@ -76,6 +76,7 @@ void Tetromino::Render() const
 
 void Tetromino::Translate(Translation translation)
 {
+    std::array<Coordinates, Pieces::Size> coordinates;
     Coordinates offset(0, 0);
 
     switch (translation)
@@ -94,46 +95,34 @@ void Tetromino::Translate(Translation translation)
             break;
     }
 
-    std::transform(m_coordinates.begin(), m_coordinates.end(), m_coordinates.begin(),
-        [&offset](Coordinates& coordinate) -> Coordinates
+    std::transform(m_coordinates.begin(), m_coordinates.end(), coordinates.begin(),
+        [&offset](Coordinates coordinate) -> Coordinates
         {
             coordinate += offset;
             return coordinate;
         }
     );
 
-    if (!IsValid(m_coordinates))
+    if (IsValid(coordinates))
     {
-        std::transform(m_coordinates.begin(), m_coordinates.end(), m_coordinates.begin(),
-            [&offset](Coordinates& coordinate) -> Coordinates
-            {
-                coordinate -= offset;
-                return coordinate;
-            }
-        );
+        m_coordinates = coordinates;
 
-        /*
-        If not valid and translation is down:
-            Insert tetromino into board
-            Check for line clears
-            Reset tetromino
-        */
-        if (translation == Translation::Down)
+        if (translation != Translation::Down)
         {
-            Insert(m_coordinates, GetColor());
-            LineClear();
-            Reset();
+            m_audio.PlaySound(Audio::Sound::Translate);
         }
+    }
+    else if (translation == Translation::Down)
+    {
+        Insert(m_coordinates, GetColor());
+        LineClear();
+        Reset();
     }
 
     // Reset tetromino drop time after a down translation
     if (translation == Translation::Down)
     {
         m_dropTime = std::chrono::steady_clock::now();
-    }
-    else
-    {
-        m_audio.PlaySound(Audio::Sound::Translate);
     }
 }
 
