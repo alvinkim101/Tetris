@@ -1,4 +1,5 @@
 #include "Tetromino.h"
+
 #include "Board.h"
 #include "Audio.h"
 #include "macro/Color.h"
@@ -23,7 +24,7 @@ void Tetromino::Reset()
     static constexpr int8_t x_offset = m_board.Cols / 2;
     static constexpr int8_t y_offset = 1;
 
-    m_piece = m_pieces.Random();
+    m_piece = m_pieceSelector.Select();
     m_orientation = 0;
     std::copy(GetBaseCoordinates(m_orientation).begin(), GetBaseCoordinates(m_orientation).end(), m_coordinates.begin());
 
@@ -76,7 +77,7 @@ void Tetromino::Render() const
 
 void Tetromino::Translate(Translation translation)
 {
-    std::array<Coordinates, Pieces::Size> coordinates;
+    std::array<Coordinates, Piece::Size> coordinates;
     Coordinates offset(0, 0);
 
     switch (translation)
@@ -130,7 +131,7 @@ void Tetromino::Rotate(Rotation rotation)
 {
     Orientation orientation;
     auto offset = m_coordinates[0]; // First coordinate is relative to the origin
-    std::array<Coordinates, Pieces::Size> coordinates;
+    std::array<Coordinates, Piece::Size> coordinates;
 
     // Calculate new orientation, and assign to a temp variable
     switch (rotation)
@@ -188,7 +189,7 @@ bool Tetromino::IsValid(std::span<const Coordinates> coordinates) const
     return true;
 }
 
-const std::array<Tetromino::Coordinates, Pieces::Size>& Tetromino::GetBaseCoordinates(Orientation orientation) const
+const std::array<Tetromino::Coordinates, Piece::Size>& Tetromino::GetBaseCoordinates(Orientation orientation) const
 {
     return m_piece->orientations[orientation];
 }

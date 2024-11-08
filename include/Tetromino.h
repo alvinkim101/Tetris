@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pieces.h"
+#include "PieceSelector.h"
 
 #include <array>
 #include <span>
@@ -63,14 +63,14 @@ class Tetromino
 
         bool IsValid(std::span<const Coordinates> coordinates) const;
 
-        const std::array<Coordinates, Pieces::Size>& GetBaseCoordinates(Orientation orientation) const; // Coordinates centered at origin at a specified orientation
+        const std::array<Coordinates, Piece::Size>& GetBaseCoordinates(Orientation orientation) const; // Coordinates centered at origin at a specified orientation
         const Color& GetColor() const;
 
-        Pieces m_pieces;
-        const Pieces::Piece* m_piece;
+        PieceSelector m_pieceSelector;
+        const Piece* m_piece;
 
         // TODO: Change m_coordinates to m_offset
-        std::array<Coordinates, Pieces::Size> m_coordinates;
+        std::array<Coordinates, Piece::Size> m_coordinates;
         Orientation m_orientation; // Index for current orientation
 
         std::chrono::steady_clock::time_point m_dropTime;

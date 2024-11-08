@@ -1,17 +1,20 @@
-#include "Pieces.h"
+#include "PieceSelector.h"
 #include "macro/Color.h"
 
 #include <algorithm>
-#include <iostream>
+#include <numeric>
 
 namespace Tetris
+{
+
+namespace
 {
 
 // Contains all seven distinct tetrominoes
 // First value contains color, second value contains possible orientations
 // First coordinates are at origin
-// Clockwise ordered
-const std::vector<Pieces::Piece> Pieces::Tetrominoes =
+// Orientations are clockwise ordered
+const std::vector<Piece> Pieces =
 {
     /* I */ { glm::uvec3(RGB_CYAN), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(-2, 0), glm::ivec2(1, 0)}, {glm::ivec2(0, 0), glm::ivec2(0, -1), glm::ivec2(0, -2), glm::ivec2(0, 1)}}},
     /* O */ { glm::uvec3(RGB_YELLOW), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(0, -1), glm::ivec2(-1, -1) }}},
@@ -22,35 +25,31 @@ const std::vector<Pieces::Piece> Pieces::Tetrominoes =
     /* Z */ { glm::uvec3(RGB_RED), {{ glm::ivec2(0, 0), glm::ivec2(-1, 0), glm::ivec2(0, 1), glm::ivec2(1, 1) }, { glm::ivec2(0, 0), glm::ivec2(0, 1), glm::ivec2(1, -1), glm::ivec2(1, 0) }}}
 };
 
-thread_local std::default_random_engine Pieces::m_rng;
+}
 
-Pieces::Pieces()
+thread_local Random PieceSelector::RNG;
+
+PieceSelector::PieceSelector() : m_piecesIndexes(Pieces.size())
 {
-    std::random_device rd;
-    m_rng.seed(rd());
-
-    for (int i = 0; i < m_indices.size(); i++)
-    {
-        m_indices[i] = i;
-    }
+    std::iota(m_piecesIndexes.begin(), m_piecesIndexes.end(), 0);
 
     Shuffle();
 }
 
-const Pieces::Piece* Pieces::Random()
+const Piece* PieceSelector::Select()
 {
-    if (m_currentIndex == NumberOfPieces)
+    if (m_index == Pieces.size())
     {
         Shuffle();
-        m_currentIndex = 0;
+        m_index = 0;
     }
 
-    return &Tetrominoes[m_indices[m_currentIndex++]];
+    return &Pieces[m_piecesIndexes[m_index++]];
 }
 
-void Pieces::Shuffle()
+void PieceSelector::Shuffle()
 {
-    std::shuffle(m_indices.begin(), m_indices.end(), m_rng);
+    std::shuffle(m_piecesIndexes.begin(), m_piecesIndexes.end(), RNG());
 }
 
 }
